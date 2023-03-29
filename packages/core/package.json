@@ -1,6 +1,6 @@
 {
-    "name": "@glideapps/glide-data-grid",
-    "version": "5.2.1",
+    "name": "@workfront-grid/glide-data-grid",
+    "version": "5.2.3-0",
     "description": "React data grid for beautifully displaying and editing large amounts of data with amazing performance.",
     "sideEffects": [
         "**/*.css"
@@ -31,7 +31,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/glideapps/glide-data-grid.git",
+        "url": "git+https://github.com/Workfront/glide-data-grid.git",
         "directory": "packages/core"
     },
     "keywords": [
@@ -49,7 +49,7 @@
     "author": "Glide",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/glideapps/glide-data-grid/issues"
+        "url": "https://github.com/workfront/glide-data-grid/issues"
     },
     "homepage": "https://grid.glideapps.com",
     "dependencies": {

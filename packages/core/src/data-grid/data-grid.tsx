@@ -1135,8 +1135,11 @@ const DataGrid: React.ForwardRefRenderFunction<DataGridRef, DataGridProps> = (p,
             if (canvas === null) return;
 
             let bounds: Rectangle | undefined;
+            const location: { col?: number; row?: number } = {};
             if (selection.current !== undefined) {
                 bounds = getBoundsForItem(canvas, selection.current.cell[0], selection.current.cell[1]);
+                location.col = selection.current.cell[0];
+                location.row = selection.current.cell[1];
             }
 
             onKeyDown?.({
@@ -1151,6 +1154,7 @@ const DataGrid: React.ForwardRefRenderFunction<DataGridRef, DataGridProps> = (p,
                 key: event.key,
                 keyCode: event.keyCode,
                 rawEvent: event,
+                location,
             });
         },
         [onKeyDown, selection, getBoundsForItem]
@@ -1162,8 +1166,11 @@ const DataGrid: React.ForwardRefRenderFunction<DataGridRef, DataGridProps> = (p,
             if (canvas === null) return;
 
             let bounds: Rectangle | undefined;
+            const location: { col?: number; row?: number } = {};
             if (selection.current !== undefined) {
                 bounds = getBoundsForItem(canvas, selection.current.cell[0], selection.current.cell[1]);
+                location.col = selection.current.cell[0];
+                location.row = selection.current.cell[1];
             }
 
             onKeyUp?.({
@@ -1178,6 +1185,7 @@ const DataGrid: React.ForwardRefRenderFunction<DataGridRef, DataGridProps> = (p,
                 key: event.key,
                 keyCode: event.keyCode,
                 rawEvent: event,
+                location,
             });
         },
         [onKeyUp, selection, getBoundsForItem]
@@ -1550,6 +1558,7 @@ const DataGrid: React.ForwardRefRenderFunction<DataGridRef, DataGridProps> = (p,
                                                     shiftKey: false,
                                                     altKey: false,
                                                     rawEvent: undefined,
+                                                    location: { col, row },
                                                 });
                                             }}
                                             onFocusCapture={e => {

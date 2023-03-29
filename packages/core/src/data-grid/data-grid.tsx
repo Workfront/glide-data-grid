@@ -175,7 +175,6 @@ export interface DataGridProps {
 
     /**
      * Determines what can be dragged using HTML drag and drop
-     * @defaultValue false
      * @group Drag and Drop
      */
     readonly isDraggable: boolean | "cell" | "header" | undefined;
@@ -1058,9 +1057,16 @@ const DataGrid: React.ForwardRefRenderFunction<DataGridRef, DataGridProps> = (p,
 
     const hoveredRef = React.useRef<GridMouseEventArgs>();
     const onMouseMoveImpl = React.useCallback(
-        (ev: MouseEvent) => {
+        (ev: MouseEvent) => {        
+
             const canvas = ref.current;
-            if (canvas === null) return;
+            const eventTarget = eventTargetRef?.current;
+
+
+            
+            if (canvas === null || (ev.target !== canvas && ev.target !== eventTarget)) {
+                return;
+            }
 
             const args = getMouseArgsForPosition(canvas, ev.clientX, ev.clientY, ev);
             if (!isSameItem(args, hoveredRef.current)) {

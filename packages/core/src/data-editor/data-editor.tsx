@@ -2623,10 +2623,7 @@ const DataEditorImpl: React.ForwardRefRenderFunction<DataEditorRef, DataEditorPr
 
                 const renderer = getCellRenderer(markerCell);
 
-                renderer?.onKeyDown?.({
-                    ...event,
-                    cell: markerCell,
-                })
+                renderer?.onKeyDown?.(event)
 
                 let cancelled = false;
                 if (onKeyDownIn !== undefined) {

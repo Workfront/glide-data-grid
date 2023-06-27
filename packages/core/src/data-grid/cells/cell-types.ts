@@ -70,9 +70,7 @@ interface BaseCellRenderer<T extends InnerGridCell> {
     ) => T | undefined;
 
     readonly onKeyDown?: (
-        args: {
-            readonly cell: T;
-        } & GridKeyEventArgs
+        args: GridKeyEventArgs
     ) => void;
 
     readonly onSelect?: (

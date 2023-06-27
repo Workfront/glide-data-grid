@@ -2619,7 +2619,6 @@ const DataEditorImpl: React.ForwardRefRenderFunction<DataEditorRef, DataEditorPr
         (event: GridKeyEventArgs) => {
             const fn = async () => {
 
-                // TODO: why can me undefined?
                 const markerCell = getMangledCellContent([event.location.col!, event.location.row!]);
 
                 const renderer = getCellRenderer(markerCell);

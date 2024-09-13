@@ -199,9 +199,8 @@ export function mapRowIndexToPath(row: number, flattenedRowGroups?: readonly Fla
                 contentIndex: -1,
                 groupRows: group.rows,
             };
-        toGo--;
         if (!group.isCollapsed) {
-            if (toGo < group.rows)
+            if (toGo <= group.rows)
                 return {
                     path: [...group.path, toGo],
                     originalIndex: group.headerIndex + toGo,
@@ -210,7 +209,9 @@ export function mapRowIndexToPath(row: number, flattenedRowGroups?: readonly Fla
                     contentIndex: group.contentIndex + toGo,
                     groupRows: group.rows,
                 };
-            toGo -= group.rows;
+            toGo = toGo - group.rows - 1;
+        } else {
+            toGo--;
         }
     }
     // this shouldn't happen

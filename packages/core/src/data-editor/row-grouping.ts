@@ -167,7 +167,7 @@ export function flattenRowGroups(rowGrouping: RowGroupingOptions, rows: number):
         });
 }
 
-interface MapResult {
+export interface MapResult {
     readonly path: readonly number[];
     readonly isGroupHeader: boolean;
     readonly originalIndex: number;
@@ -202,11 +202,11 @@ export function mapRowIndexToPath(row: number, flattenedRowGroups?: readonly Fla
         if (!group.isCollapsed) {
             if (toGo <= group.rows)
                 return {
-                    path: [...group.path, toGo],
+                    path: [...group.path, toGo - 1],
                     originalIndex: group.headerIndex + toGo,
                     isGroupHeader: false,
-                    groupIndex: toGo,
-                    contentIndex: group.contentIndex + toGo,
+                    groupIndex: toGo - 1,
+                    contentIndex: group.contentIndex + toGo - 1,
                     groupRows: group.rows,
                 };
             toGo = toGo - group.rows - 1;

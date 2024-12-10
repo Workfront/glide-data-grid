@@ -186,7 +186,9 @@ export function drawGroups(
             group?.overrideTheme === undefined ? theme : mergeAndRealizeTheme(theme, group.overrideTheme);
         const isHovered = hRow === -2 && hCol !== undefined && hCol >= span[0] && hCol <= span[1];
 
-        const fillColor = isHovered ? groupTheme.bgHeaderHovered : groupTheme.bgHeader;
+        const fillColor = isHovered
+            ? groupTheme.bgGroupHeaderHovered ?? groupTheme.bgHeaderHovered
+            : groupTheme.bgGroupHeader ?? groupTheme.bgHeader;
         if (fillColor !== theme.bgHeader) {
             ctx.fillStyle = fillColor;
             ctx.fill();
@@ -262,7 +264,7 @@ export function drawGroups(
             ctx.beginPath();
             ctx.moveTo(x + 0.5, 0);
             ctx.lineTo(x + 0.5, groupHeaderHeight);
-            ctx.strokeStyle = theme.borderColor;
+            ctx.strokeStyle = groupTheme.borderColor ?? theme.borderColor;
             ctx.lineWidth = 1;
             ctx.stroke();
         }

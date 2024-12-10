@@ -23,6 +23,8 @@ export function makeCSSStyle(theme: Theme): Record<string, string> {
         "--gdg-bg-header": theme.bgHeader,
         "--gdg-bg-header-has-focus": theme.bgHeaderHasFocus,
         "--gdg-bg-header-hovered": theme.bgHeaderHovered,
+        "--gdg-bg-group-header": theme.bgGroupHeader ?? theme.bgHeader,
+        "--gdg-bg-group-header-hovered": theme.bgGroupHeaderHovered ?? theme.bgHeaderHovered,
         "--gdg-bg-bubble": theme.bgBubble,
         "--gdg-bg-bubble-selected": theme.bgBubbleSelected,
         "--gdg-bg-search-result": theme.bgSearchResult,
@@ -66,6 +68,8 @@ export interface Theme {
     bgHeader: string;
     bgHeaderHasFocus: string;
     bgHeaderHovered: string;
+    bgGroupHeader?: string;
+    bgGroupHeaderHovered?: string;
     bgBubble: string;
     bgBubbleSelected: string;
     bgSearchResult: string;
@@ -109,6 +113,8 @@ const dataEditorBaseTheme: Theme = {
     bgHeader: "#F7F7F8",
     bgHeaderHasFocus: "#E9E9EB",
     bgHeaderHovered: "#EFEFF1",
+    bgGroupHeader: "#F7F7F8",
+    bgGroupHeaderHovered: "#EFEFF1",
 
     bgBubble: "#EDEDF3",
     bgBubbleSelected: "#FFFFFF",

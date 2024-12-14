@@ -259,8 +259,10 @@ The global theme is provided by the DataEditor by default and can be overriden b
 | bgCell | --gdg-bg-cell | string | The primary background color of the data grid. |
 | bgCellMedium | --gdg-bg-cell-medium | string | Used for disabled or otherwise off colored cells. |
 | bgHeader | --gdg-bg-header | string | The header background color |
+| bgGroupHeader | --gdg-bg-group-header | string \\| undefined | The group header background color, if none provided the \`bgHeader\` is used instead. |
 | bgHeaderHasFocus | --gdg-bg-header-has | string | The header background color when its column contains the selected cell |
 | bgHeaderHovered | --gdg-bg-header-hovered | string | The header background color when it is hovered |
+| bgGroupHeaderHovered | --gdg-bg-group-header-hovered | string \\| undefined | The group header background color when it is hovered, if none provided the \`bgHeaderHovered\` is used instead. |
 | bgBubble | --gdg-bg-bubble | string | The background color used in bubbles |
 | bgBubbleSelected | --gdg-bg-bubble-selected | string | The background color used in bubbles when the cell is selected |
 | bgSearchResult | --gdg-bg-search-result | string | The background color used for cells which match the search string |

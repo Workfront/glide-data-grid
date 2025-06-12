@@ -645,6 +645,8 @@ export function drawHeader(
                 hasSelectedCell,
                 spriteManager,
                 menuBounds: headerLayout?.menuBounds ?? { x: 0, y: 0, height: 0, width: 0 },
+                hoverX: posX,
+                hoverY: posY,
             },
             () =>
                 drawHeaderInner(

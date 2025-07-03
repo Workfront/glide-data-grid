@@ -1304,7 +1304,7 @@ const DataEditorImpl: React.ForwardRefRenderFunction<DataEditorRef, DataEditorPr
                 //If the grid is empty, we will return text
                 const isFirst = col === rowMarkerOffset;
 
-                const maybeFirstColumnHint = isFirst ? trailingRowOptions?.hint ?? "" : "";
+                const maybeFirstColumnHint = isFirst ? (trailingRowOptions?.hint ?? "") : "";
                 const c = mangledColsRef.current[col];
 
                 if (c?.trailingRowOptions?.disabled === true) {
@@ -1550,7 +1550,7 @@ const DataEditorImpl: React.ForwardRefRenderFunction<DataEditorRef, DataEditorPr
                             frozenLeftWidth += columns[i].width;
                         }
                         let frozenRightWidth = 0;
-                        for (let i = mangledCols.length - 1; i >= mangledCols.length - freezeRightColumns; i--) {
+                        for (let i = columns.length - 1; i >= columns.length - 1 - freezeRightColumns; i--) {
                             frozenRightWidth += columns[i].width;
                         }
                         let trailingRowHeight = 0;
@@ -3485,7 +3485,7 @@ const DataEditorImpl: React.ForwardRefRenderFunction<DataEditorRef, DataEditorPr
                 formatted?: string | string[]
             ): EditListItem | undefined {
                 const stringifiedRawValue =
-                    typeof rawValue === "object" ? rawValue?.join("\n") ?? "" : rawValue?.toString() ?? "";
+                    typeof rawValue === "object" ? (rawValue?.join("\n") ?? "") : (rawValue?.toString() ?? "");
 
                 if (!isInnerOnlyCell(inner) && isReadWriteCell(inner) && inner.readonly !== true) {
                     const coerced = coercePasteValue?.(stringifiedRawValue, inner);
@@ -3863,7 +3863,7 @@ const DataEditorImpl: React.ForwardRefRenderFunction<DataEditorRef, DataEditorPr
         (col: number) => {
             return typeof verticalBorder === "boolean"
                 ? verticalBorder
-                : verticalBorder?.(col - rowMarkerOffset) ?? true;
+                : (verticalBorder?.(col - rowMarkerOffset) ?? true);
         },
         [rowMarkerOffset, verticalBorder]
     );

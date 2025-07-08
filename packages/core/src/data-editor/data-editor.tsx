@@ -676,6 +676,11 @@ export interface DataEditorProps extends Props, Pick<DataGridSearchProps, "image
     readonly scrollToActiveCell?: boolean;
 
     readonly drawFocusRing?: boolean | "no-editor";
+
+    /**
+     * Allows overriding the default portal element.
+     */
+    readonly portalElementRef?: React.RefObject<HTMLElement>;
 }
 
 type ScrollToFn = (
@@ -874,6 +879,7 @@ const DataEditorImpl: React.ForwardRefRenderFunction<DataEditorRef, DataEditorPr
         resizeIndicator,
         scrollToActiveCell = true,
         drawFocusRing: drawFocusRingIn = true,
+        portalElementRef,
     } = p;
 
     const drawFocusRing = drawFocusRingIn === "no-editor" ? overlay === undefined : drawFocusRingIn;
@@ -4202,6 +4208,7 @@ const DataEditorImpl: React.ForwardRefRenderFunction<DataEditorRef, DataEditorPr
                             className={experimental?.isSubGrid === true ? "click-outside-ignore" : undefined}
                             provideEditor={provideEditor}
                             imageEditorOverride={imageEditorOverride}
+                            portalElementRef={portalElementRef}
                             onFinishEditing={onFinishEditing}
                             markdownDivCreateNode={markdownDivCreateNode}
                             isOutsideClick={isOutsideClick}

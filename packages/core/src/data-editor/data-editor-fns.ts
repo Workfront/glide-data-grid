@@ -225,3 +225,71 @@ export function copyToClipboard(
 export function toggleBoolean(data: boolean | null | undefined): boolean | null | undefined {
     return data !== true;
 }
+
+/**
+ * Computes the intrinsic `[width, height]` (as CSS px strings) for the grid's scrollable content,
+ * used to size the container when the consumer doesn't pass an explicit `width`/`height`.
+ */
+export function computeIdealSize(
+    rowHeight: number | ((row: number) => number),
+    rows: number,
+    showTrailingBlankRow: boolean,
+    totalHeaderHeight: number,
+    contentWidth: number,
+    clientAreaWidth: number,
+    clientAreaHeight: number,
+    scrollbarWidth: number
+): readonly [string, string] {
+    let h: number;
+    const rowsCountWithTrailingRow = rows + (showTrailingBlankRow ? 1 : 0);
+    if (typeof rowHeight === "number") {
+        h = totalHeaderHeight + rowsCountWithTrailingRow * rowHeight;
+    } else {
+        h = totalHeaderHeight;
+        if (clientAreaHeight > 0) {
+            // Sum exactly until the viewport is full (an undershoot here spuriously shows a
+            // scrollbar); extrapolate the rest from the average to avoid an O(n) scan on huge datasets.
+            const availableRowSpace = clientAreaHeight - totalHeaderHeight;
+            // Keep summing past a viewport-filling overflow until we've sampled at least this many
+            // rows, so the average used to extrapolate the rest isn't based on a single tall row.
+            const minSamples = Math.min(rowsCountWithTrailingRow, 10);
+            let summedHeight = 0;
+            let rowsSummed = 0;
+            while (rowsSummed < rowsCountWithTrailingRow) {
+                const rh = rowHeight(rowsSummed);
+                h += rh;
+                summedHeight += rh;
+                rowsSummed++;
+                if (summedHeight > availableRowSpace && rowsSummed >= minSamples) {
+                    break;
+                }
+            }
+            const remainingRows = rowsCountWithTrailingRow - rowsSummed;
+            if (remainingRows > 0) {
+                h += (summedHeight / rowsSummed) * remainingRows;
+            }
+        } else {
+            // Not yet measured (e.g. first render) — fall back to a bounded sample average
+            // rather than summing every row.
+            let avg = 0;
+            const toAverage = Math.min(rowsCountWithTrailingRow, 10);
+            for (let i = 0; i < toAverage; i++) {
+                avg += rowHeight(i);
+            }
+            avg = toAverage > 0 ? Math.floor(avg / toAverage) : 0;
+            h += rowsCountWithTrailingRow * avg;
+        }
+    }
+
+    // Only reserve vertical room for a horizontal scrollbar when the content actually overflows
+    // horizontally; reserving it unconditionally left dead space below the grid when it didn't.
+    if (clientAreaWidth > 0 && contentWidth > clientAreaWidth) {
+        h += scrollbarWidth;
+    }
+
+    const w = contentWidth + scrollbarWidth;
+
+    // We need to set a reasonable cap here as some browsers will just ignore huge values
+    // rather than treat them as huge values.
+    return [`${Math.min(100_000, w)}px`, `${Math.min(100_000, h)}px`];
+}

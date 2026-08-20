@@ -57,7 +57,7 @@ import { measureColumn, useColumnSizer } from "./use-column-sizer.js";
 import { isHotkey } from "../common/is-hotkey.js";
 import { type SelectionBlending, useSelectionBehavior } from "../internal/data-grid/use-selection-behavior.js";
 import { useCellsForSelection } from "./use-cells-for-selection.js";
-import { unquote, expandSelection, copyToClipboard, toggleBoolean } from "./data-editor-fns.js";
+import { unquote, expandSelection, copyToClipboard, toggleBoolean, computeIdealSize } from "./data-editor-fns.js";
 import { DataEditorContainer } from "../internal/data-editor-container/data-grid-container.js";
 import { useAutoscroll } from "./use-autoscroll.js";
 import type { CustomRenderer, CellRenderer, InternalCellRenderer } from "../cells/cell-types.js";
@@ -1096,6 +1096,8 @@ const DataEditorImpl: React.ForwardRefRenderFunction<DataEditorRef, DataEditorPr
     }, [theme]);
 
     const [clientSize, setClientSize] = React.useState<readonly [number, number, number]>([0, 0, 0]);
+    // Primitives, not `clientSize` itself, so deps below don't re-fire on every scroll tick's new array.
+    const [clientAreaWidth, clientAreaHeight] = clientSize;
 
     const rendererMap = React.useMemo(() => {
         if (renderers === undefined) return {};
@@ -4272,29 +4274,28 @@ const DataEditorImpl: React.ForwardRefRenderFunction<DataEditorRef, DataEditorPr
     }, []);
 
     const [idealWidth, idealHeight] = React.useMemo(() => {
-        let h: number;
         const scrollbarWidth = experimental?.scrollbarWidthOverride ?? getScrollBarWidth();
-        const rowsCountWithTrailingRow = rows + (showTrailingBlankRow ? 1 : 0);
-        if (typeof rowHeight === "number") {
-            h = totalHeaderHeight + rowsCountWithTrailingRow * rowHeight;
-        } else {
-            let avg = 0;
-            const toAverage = Math.min(rowsCountWithTrailingRow, 10);
-            for (let i = 0; i < toAverage; i++) {
-                avg += rowHeight(i);
-            }
-            avg = Math.floor(avg / toAverage);
-
-            h = totalHeaderHeight + rowsCountWithTrailingRow * avg;
-        }
-        h += scrollbarWidth;
-
-        const w = mangledCols.reduce((acc, x) => x.width + acc, 0) + scrollbarWidth;
-
-        // We need to set a reasonable cap here as some browsers will just ignore huge values
-        // rather than treat them as huge values.
-        return [`${Math.min(100_000, w)}px`, `${Math.min(100_000, h)}px`];
-    }, [mangledCols, experimental?.scrollbarWidthOverride, rowHeight, rows, showTrailingBlankRow, totalHeaderHeight]);
+        const contentWidth = mangledCols.reduce((acc, x) => x.width + acc, 0);
+        return computeIdealSize(
+            rowHeight,
+            rows,
+            showTrailingBlankRow,
+            totalHeaderHeight,
+            contentWidth,
+            clientAreaWidth,
+            clientAreaHeight,
+            scrollbarWidth
+        );
+    }, [
+        mangledCols,
+        experimental?.scrollbarWidthOverride,
+        rowHeight,
+        rows,
+        showTrailingBlankRow,
+        totalHeaderHeight,
+        clientAreaWidth,
+        clientAreaHeight,
+    ]);
 
     const cssStyle = React.useMemo(() => {
         return makeCSSStyle(mergedTheme);
